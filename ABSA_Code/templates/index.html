@@ -1,0 +1,100 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>Text Classification</title>
+</head>
+<body>
+    <h1>PHÂN TÍCH ĐÁNH GIÁ</h1>
+    <form action="/predict" method="post">
+        <label for="input_text">Enter Text:</label><br>
+        <textarea id="input_text" name="input_text" rows="4" cols="50"></textarea><br>
+        <input type="Phân tích" value="Submit">
+    </form>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link rel="shortcut icon" type="image/png" href="logo.png"/>
+    <title>Trang chủ</title>
+    <style>
+        .corner-image {
+            position: fixed;
+            bottom: 0px;
+            left: 0px;
+            z-index: 9999;
+            width: 400px; /* Chiều rộng của hình ảnh */
+            height: auto; /* Chiều cao tự động theo tỷ lệ */
+        }
+    </style>
+</head>
+<body class="container mt-5 text-center bg-light">
+    <div class="d-flex justify-content-end">
+        <a class="btn btn-outline-info me-2" href="result.html" role="button">
+            <i class="fas fa-database"></i> Data
+        </a>
+        <a class="btn btn-outline-info me-2" href="stats.html" role="button">
+            <i class="fas fa-chart-bar"></i> Stats
+        </a>
+    </div>
+    <h1>Aspect-Based Sentiment Analysis</h1>
+    <img src="https://i1.wp.com/turbolab.in/wp-content/uploads/2021/09/sentiment.png?fit=698%2C400&ssl=1" height="110" alt="#">
+        
+    
+    <div class="row mt-5">
+        <div class="col-md-6">
+            <form id="predict_form" action="/predict" method="post">
+                <div class="mb-3">
+                    <label for="input"><b>Review</b></label>
+                    <textarea name="text" class="form-control" style="height: 150px;" placeholder="Type here..." id="input_text"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Predict</button>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="output"><b>Result</b></label>
+                <textarea id="predictions" class="form-control" style="height: 150px;" placeholder="Result..." readonly></textarea>
+            </div>
+            <button id="reset_button" class="btn btn-danger">Reset</button>
+        </div>
+    </div>
+    
+    <img class="corner-image" src="https://cdn.brandmentions.com/blog/wp-content/uploads/2019/05/sentiment-analysys-brandmentions.png" alt="Corner Image">
+
+    <!-- JavaScript -->
+    <script>
+        // ... Mã JavaScript hiện tại ...
+    
+        // Gán sự kiện submit cho form dự đoán
+        document.getElementById('predict_form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            submitForm();
+            saveData(); // Gọi hàm saveData() sau khi submit form dự đoán
+        });
+    
+        // Hàm để lưu dữ liệu vào file data.json
+        function saveData() {
+            const text = document.querySelector('textarea[name="text"]').value;
+            const predictions = document.getElementById('predictions').value;
+            fetch('/save_data', {
+                method: 'POST',
+                body: new URLSearchParams({ 'text': text, 'predictions': predictions }),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Data saved successfully:', data);
+            })
+            .catch(error => {
+                console.error('Error saving data:', error);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+.mb-5{
+    text-align: center;
+    padding-top: 0px;
+   padding-bottom: 0px;
+}
+body{
+   padding-top: 0px;
+}
+*, *:after, *:before {
+       box-sizing: border-box;
+}
+h1{
+   text-align: center;
+       padding-top: 0px;
+       padding-bottom: 0px;
+}
+input[type="checkbox"] {
+       visibility: hidden;
+       background-color: #FFF;
+}
+input[type="checkbox"]:checked + label:before {
+       transform: translateX(45px);
+       background-color: #FFF;
+}
+#input{
+       padding-top: 0px;
+       padding-bottom: 0px;
+}
+label {
+       display: flex;
+       width: 90px;
+       height: 45px;
+       border: 3px solid;
+       border-radius: 50em;
+       position: relative;
+       transition: transform .33s ease-in-out;
+       transform-origin: 50% 50%;
+       cursor: pointer;
+}
+label:before {
+   transition: transform .33s ease;
+   content: "";
+   display: block;
+   position: absolute;
+   width: 27px;
+   height: 27px;
+   background-color: #000;
+   border-radius: 50%;
+   top: 6px;
+   left: 6px;
+}
+.custom-file-upload{   
+}

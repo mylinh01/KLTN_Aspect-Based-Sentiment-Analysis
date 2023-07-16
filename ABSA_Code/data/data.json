@@ -1,0 +1,18 @@
+[
+    {
+      "review": "Ấn tượng đầu là quán siêu to siêu thoáng lại còn bonus thêm quả máy hút mùi ở mỗi bàn. Quá hiện đại luôn ! - Vừa đặt mông xuống phát gọi món, chưa đầy 5p là đã ra luôn đồ rồi.",
+      "result": ["AMBIENCE#GENERAL, positive; FOOD#STYLE&OPTIONS, positive; SERVICE#GENERAL, positive"]
+    },
+    {
+      "review": "Bánh ăn thơm và vừa miệng. Gìon rụm, ngọt nhưng không quá gắt. Đáng để thử",
+      "result": ["FOOD#QUALITY, positive"]
+    },
+    {
+      "review": "chắc quán mới mở vì tuần trc mình đi qua không thấy. Chỗ ngồi trong nhà kê đc 3-4 bàn thôi còn chủ yếu thì mọi người ngồi vỉa hè nhé! Ngay khi order thì được bạn nv nướng luôn trên vỉ, mùi thơm lắm",
+      "result": ["AMBIENCE#GENERAL, neutral; FOOD#STYLE&OPTIONS, positive; FOOD#QUALITY, positive"]
+    },
+    {
+      "review": "Ngan mềm, không hôi và được lóc xương- Thích hũ tỏi ngâm giấm- Ăn kèm với ra quế, huyết, quẩy giòn- Măng chua ngon dã man",
+      "result": ["FOOD#QUALITY, positive; FOOD#STYLE&OPTIONS, positive"]
+    }
+  ]
