@@ -1,0 +1,7 @@
+transformers
+tf-models-official
+py_vncorenlp 
+vncorenlp
+fasttext
+jinja2==2.11.3
+flask==1.1.2
