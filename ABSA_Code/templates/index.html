@@ -3,8 +3,8 @@
 <head>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"/>
-    <link rel="shortcut icon" type="image/png" href="logo.png"/>
-    <title>Trang chủ</title>
+    <link rel="shortcut icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/2839/2839162.png"/>
+    <title>Home</title>
     <style>
         .corner-image {
             position: fixed;
@@ -18,10 +18,13 @@
 </head>
 <body class="container mt-5 text-center bg-light">
     <div class="d-flex justify-content-end">
-        <a class="btn btn-outline-info me-2" href="result.html" role="button">
+        <a class="btn btn-outline-info me-2 {{ 'active' if request.path == '/' }}" href="/" role="button">
+            <i class="fas fa-home"></i> Home
+        </a>
+        <a class="btn btn-outline-info me-2 {{ 'active' if request.path == '/data' }}" href="/data" role="button">
             <i class="fas fa-database"></i> Data
         </a>
-        <a class="btn btn-outline-info me-2" href="stats.html" role="button">
+        <a class="btn btn-outline-info me-2 {{ 'active' if request.path == '/stats' }}" href="/stats" role="button">
             <i class="fas fa-chart-bar"></i> Stats
         </a>
     </div>
@@ -66,7 +69,7 @@
                 const predictions = document.getElementById('predictions');
                 predictions.value = '';
                 data.forEach(result => {
-                    predictions.value += `${result.category}: ${result.sentiment}\n`;
+                    predictions.value += `${result.aspect}: ${result.sentiment}\n`;
                 });
             });
         }
@@ -86,7 +89,7 @@
         document.getElementById('reset_button').addEventListener('click', function () {
             resetForm();
         });
-        
+
         // Gán sự kiện submit cho form dự đoán
         document.getElementById('predict_form').addEventListener('submit', function (event) {
             event.preventDefault();
