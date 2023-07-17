@@ -10,7 +10,7 @@ import os
 
 tf.keras.utils.get_custom_objects().update({'TFRobertaModel': TFRobertaModel})
 tf.keras.utils.get_custom_objects().update({'AdamWeightDecay': AdamWeightDecay})
-model = tf.keras.models.load_model('./model/bert.h5', custom_objects={"AdamWeightDecay": AdamWeightDecay})
+model = tf.keras.models.load_model('./model/bert.h5')
 
 def predict(model, inputs, batch_size=1, verbose=0):
     y_pred = model.predict(inputs, batch_size=batch_size, verbose=verbose)
