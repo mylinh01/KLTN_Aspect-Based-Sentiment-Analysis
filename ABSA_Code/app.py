@@ -5,6 +5,8 @@ from flask import Flask, request, render_template, jsonify
 from transformers import TFRobertaModel, AutoTokenizer, AdamWeightDecay
 from preprocess import text_preprocess
 import json
+import os
+
 
 tf.keras.utils.get_custom_objects().update({'TFRobertaModel': TFRobertaModel})
 tf.keras.utils.get_custom_objects().update({'AdamWeightDecay': AdamWeightDecay})
@@ -16,7 +18,7 @@ def predict(model, inputs, batch_size=1, verbose=0):
     return np.argmax(y_pred, axis=-1)
 
 replacements = {0: None, 1: 'positive', 2: 'negative', 3: 'neutral'}
-categories = {'AMBIENCE#GENERAL', 'DRINKS#PRICES', 'DRINKS#QUALITY', 'DRINKS#STYLE&OPTIONS',
+aspects = {'AMBIENCE#GENERAL', 'DRINKS#PRICES', 'DRINKS#QUALITY', 'DRINKS#STYLE&OPTIONS',
               'FOOD#PRICES', 'FOOD#QUALITY', 'FOOD#STYLE&OPTIONS', 'LOCATION#GENERAL',
               'RESTAURANT#GENERAL', 'RESTAURANT#MISCELLANEOUS', 'RESTAURANT#PRICES', 'SERVICE#GENERAL'}
 
@@ -24,6 +26,7 @@ tokenizer = AutoTokenizer.from_pretrained('vinai/phobert-base')
 
 app = Flask(__name__)
 global_predictions = []
+data_file = './data/data.json'
 
 @app.route('/')
 def home():
@@ -31,7 +34,17 @@ def home():
 
 @app.route('/data')
 def data():
-    return render_template('data.html', predictions=global_predictions)
+    # Đọc dữ liệu từ tệp JSON
+    with open('./data/data.json', 'r') as file:
+        data = json.load(file)
+    return render_template('data.html', predictions = data)
+
+@app.route('/stats')
+def stats():
+    # Đọc dữ liệu từ tệp JSON
+    with open('./data/data.json', 'r') as file:
+        data = json.load(file)
+    return render_template('stats.html', predictions = data)
 
 @app.route('/predict', methods=['POST'])
 def predict_sentiment():
@@ -47,9 +60,9 @@ def predict_sentiment():
                                   'attention_mask': attention_mask})
 
     results = []
-    for category, sentiment in zip(categories, predictions[0]):
+    for aspect, sentiment in zip(aspects, predictions[0]):
         if sentiment:
-            results.append({'category': category, 'sentiment': replacements[sentiment]})
+            results.append({'aspect': aspect, 'sentiment': replacements[sentiment]})
 
     global_predictions.append({'input_text': input_text, 'predictions': results})
 
@@ -57,11 +70,19 @@ def predict_sentiment():
 
 @app.route('/save_data', methods=['POST'])
 def save_data():
-    # Lưu dữ liệu vào tệp JSON
-    with open('./data/data.json', 'w') as file:
-        json.dump(global_predictions, file)
+    global global_predictions
+    if os.path.exists(data_file):
+        with open(data_file, 'r') as file:
+            old_data = json.load(file)
+    else:
+        old_data = []
+    old_data.extend(global_predictions)
+
+    with open(data_file, 'w') as file:
+        json.dump(old_data, file)
+
+    global_predictions.clear()
 
     return jsonify(success=True)
-
 if __name__ == '__main__':
     app.run(debug=True)
