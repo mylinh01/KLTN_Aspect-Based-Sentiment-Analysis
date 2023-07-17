@@ -67,8 +67,41 @@
 
     <!-- JavaScript -->
     <script>
-        // ... Mã JavaScript hiện tại ...
+        function submitForm() {
+            const text = document.querySelector('textarea[name="text"]').value;
+            fetch('/predict', {
+                method: 'POST',
+                body: new URLSearchParams({ 'text': text, 'predictions': document.getElementById('predictions').value }),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const predictions = document.getElementById('predictions');
+                predictions.value = '';
+                data.forEach(result => {
+                    predictions.value += `${result.category}: ${result.sentiment}\n`;
+                });
+            });
+        }
     
+        // Thêm hàm resetForm() để reset trang
+        function resetForm() {
+            document.getElementById('input_text').value = ''; // Xóa nội dung của textarea nhập liệu
+            document.getElementById('predictions').value = ''; // Xóa nội dung của textarea hiển thị kết quả
+        }
+    
+        // Gán sự kiện click cho nút "Predict" và "Reset"
+        document.querySelector('form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            submitForm();
+        });
+    
+        document.getElementById('reset_button').addEventListener('click', function () {
+            resetForm();
+        });
+        
         // Gán sự kiện submit cho form dự đoán
         document.getElementById('predict_form').addEventListener('submit', function (event) {
             event.preventDefault();
