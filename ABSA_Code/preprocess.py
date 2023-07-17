@@ -1,6 +1,3 @@
-# https://github.com/nguyenvanhieuvn/text-classification-tutorial/blob/master/text_classification_tutorial.ipynb
-# https://nguyenvanhieu.vn/phan-loai-van-ban-tieng-viet
-
 import pickle 
 import re
 from vncorenlp import VnCoreNLP
@@ -20,7 +17,7 @@ def no_marks(s):
     result = __r.sub(lambda m: __replaces_dict[m.group(0)], s)
     return result
 
-replace_list = pickle.load(open('E:/KLTN/ABSA/data/replace.pkl','rb'))
+replace_list = pickle.load(open('./data/replace.pkl','rb'))
 
 def text_preprocess(text):
     check = re.search(r'([a-z])\1+',text)
