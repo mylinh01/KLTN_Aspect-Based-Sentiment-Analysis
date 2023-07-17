@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link rel="shortcut icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/2839/2839162.png"/>
+    <title>Statistics</title>
+    <style>
+        .chart-container {
+            position: relative;
+            width: 800px;
+            height: 300px;
+            margin: 0 auto;
+        }
+        .chart-center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+    </style>
+</head>
+<body class="container mt-5 text-center bg-light">
+    <div class="d-flex justify-content-end">
+        <a class="btn btn-outline-info me-2 {{ 'active' if request.path == '/' }}" href="/" role="button">
+            <i class="fas fa-home"></i> Home
+        </a>
+        <a class="btn btn-outline-info me-2 {{ 'active' if request.path == '/data' }}" href="/data" role="button">
+            <i class="fas fa-database"></i> Data
+        </a>
+        <a class="btn btn-outline-info me-2 {{ 'active' if request.path == '/stats' }}" href="/stats" role="button">
+            <i class="fas fa-chart-bar"></i> Stats
+        </a>
+    </div>
+    <h1>Aspect-Based Sentiment Analysis - Statistics</h1>
+
+    <div class="row mt-5">
+        <!-- Container cho biểu đồ cột cho aspect -->
+        <div class="col-md-6">
+            <h2>Aspect Chart</h2>
+            <div class="chart-container">
+                <canvas id="aspectChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Container cho biểu đồ tròn cho sentiment -->
+        <div class="col-md-6">
+            <h2>Sentiment Chart</h2>
+            <div class="chart-container">
+                <div class="chart-center">
+                    <canvas id="sentimentChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Dữ liệu từ Flask được truyền vào template
+        const jsonData = {{ predictions | tojson | safe }};
+
+        // Lấy danh sách các aspect và sentiment từ dữ liệu jsonData
+        const aspects = jsonData.map(item => item.predictions.map(pred => pred.aspect)).flat();
+        const sentiments = jsonData.map(item => item.predictions.map(pred => pred.sentiment)).flat();
+
+        // Tính số lần xuất hiện của từng aspect và sentiment
+        const aspectCount = aspects.reduce((acc, aspect) => {
+            acc[aspect] = (acc[aspect] || 0) + 1;
+            return acc;
+        }, {});
+        const sentimentCount = sentiments.reduce((acc, sentiment) => {
+            acc[sentiment] = (acc[sentiment] || 0) + 1;
+            return acc;
+        }, {});
+
+        // Biểu đồ cột (Bar Chart) cho aspect
+        const aspectChartCtx = document.getElementById('aspectChart').getContext('2d');
+        const aspectChart = new Chart(aspectChartCtx, {
+            type: 'bar',
+            data: {
+                labels: Object.keys(aspectCount),
+                datasets: [{
+                    label: 'aspect Count',
+                    data: Object.values(aspectCount),
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Biểu đồ tròn (Pie Chart) cho sentiment
+        const sentimentChartCtx = document.getElementById('sentimentChart').getContext('2d');
+        const sentimentChart = new Chart(sentimentChartCtx, {
+            type: 'pie',
+            data: {
+                labels: Object.keys(sentimentCount),
+                datasets: [{
+                    data: Object.values(sentimentCount),
+                    backgroundColor: ['rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)'],
+                    borderColor: ['rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)'],
+                    borderWidth: 1
+                }]
+            }
+        });
+    </script>
+</body>
+</html>
